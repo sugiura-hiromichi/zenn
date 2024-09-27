@@ -7,3 +7,4 @@ document.body.appendChild(heading);
 let body = document.createElement('p');
 body.textContent = 'nice body';
 document.body.appendChild(body);
+
