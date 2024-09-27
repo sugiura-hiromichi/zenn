@@ -1,6 +1,7 @@
 //!Documentation for crate
 #[cfg(test)]
 mod tests {
+	use core::panic;
 	use std::any::type_name_of_val;
 
 	struct HasPrivate {
@@ -266,23 +267,23 @@ mod tests {
 			let v_debug_lower_hex = "[a, b]";
 			assert_eq!(format!("{v:x?}"), v_debug_lower_hex);
 
-			let v_debug_upper_hex = "[0xA, 0xB]";
-			assert_eq!(format!("{v:x?}"), v_debug_upper_hex);
+			let v_debug_upper_hex = "[A, B]";
+			assert_eq!(format!("{v:X?}"), v_debug_upper_hex);
 
-			let v_debug_pretty_print = "[\n    10,\n    11\n]";
+			let v_debug_pretty_print = "[\n    10,\n    11,\n]";
 			assert_eq!(format!("{v:#?}"), v_debug_pretty_print);
 
 			let i = 27;
-			let i_octal = "0o33";
+			let i_octal = "33";
 			assert_eq!(format!("{i:o}"), i_octal);
 
-			let i_lower_hex = "0x1b";
+			let i_lower_hex = "1b";
 			assert_eq!(format!("{i:x}"), i_lower_hex);
 
-			let i_upper_hex = "0x1B";
+			let i_upper_hex = "1B";
 			assert_eq!(format!("{i:X}"), i_upper_hex);
 
-			let i_binary = "0b11011";
+			let i_binary = "11011";
 			assert_eq!(format!("{i:b}"), i_binary);
 
 			let i_lower_exp = "2.7e1";
@@ -291,5 +292,71 @@ mod tests {
 			let i_upper_exp = "2.7E1";
 			assert_eq!(format!("{i:E}"), i_upper_exp);
 		}
+	}
+
+	#[test]
+	/// https://elastio.github.io/bon/blog/the-weird-of-function-local-types-in-rust
+	fn weired_path_resolving() {
+		trait TypeChannel {
+			type Type;
+		}
+
+		struct GetHiddenType;
+
+		#[allow(dead_code)]
+		fn hoge() {
+			struct NotHidden {
+				name: String,
+			}
+
+			impl TypeChannel for GetHiddenType {
+				type Type = NotHidden;
+			}
+		}
+
+		type Root = <GetHiddenType as TypeChannel>::Type;
+
+		let not_hidden = Root { name: "a".to_string(), };
+		assert_eq!("a", not_hidden.name);
+	}
+
+	#[test]
+	fn use_assert_instead_of_if() {
+		let this_is_true = true;
+
+		// this is bad habitat
+		if !this_is_true {
+			return;
+		}
+
+		// runtime assertion(実行時表明)
+		assert!(this_is_true);
+	}
+
+	#[test]
+	fn ownership_of_taken_val() {
+		let mut a = Some(0,);
+		let b = &mut a;
+		let mut c = b.take();
+		assert_eq!(*b, None);
+		if a.is_some() {
+			panic!("🫠Failed to take `a`");
+		}
+		*c.as_mut().unwrap() += 1;
+	}
+
+	#[test]
+	fn break_from_if() {
+		let mut i = 0;
+		loop {
+			if true {
+				i += 1;
+				break;
+			}
+			i += 1;
+			break;
+		}
+
+		assert_eq!(i, 1);
 	}
 }

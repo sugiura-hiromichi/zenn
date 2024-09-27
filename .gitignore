@@ -5,3 +5,4 @@ img/
 *.pdf
 !report.pdf
 .ignore_*
+typescript/gmail_lineworks_connect/node_modules/@types
