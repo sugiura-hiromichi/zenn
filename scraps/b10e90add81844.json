@@ -1,0 +1,74 @@
+{
+  "title": "luaとneovim",
+  "closed": false,
+  "archived": false,
+  "created_at": "2023-01-05",
+  "comments": [
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "neovim0.9からeditorconfigがサポート"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "(Neo)vimでは`TODO`や`XXX`などの文字列がコメント内にあると、特別なハイライトがされる(Todoというハイライトグループ）<br/>\nどの様なワードがハイライトされるかは `$VIMRUNTIME/syntax/(language name).vim`に定義されている。\n\n例：<br/>\n`vim.bo.filetype=='rust'`の場合、TODO, FIXME, XXX, NB, NOTEがハイライトされる。これは `$VIMRUNTIME/syntax/rust.vim`で定義されている。<br/>\n`vim.bo.filetype=='lua'`の場合、TODO, FIXME, XXX, がハイライトされる。これは `$VIMRUNTIME/syntax/lua.vim`で定義されている。"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-09",
+      "body_markdown": "`:enew`で空の新しいバッファを作る。一時的にメモを取るのに使えそう"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-09",
+      "body_markdown": "`ZZ`はバッファを閉じるのに使われるが、`ZQ`で変更を保存せずに閉じることができる",
+      "body_updated_at": "2023-02-24"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-16",
+      "body_markdown": "neovimの`cmdline`でluaのtableを出力するショートカット\n```vim\n:lua =vim.opt.list\n```\n`:lua print(vim.inspect(vim.opt.list))`とかするよりだいぶ楽ですね"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-16",
+      "body_markdown": "`v`はvisual modeに入るだけでなくモーションとしても使える\n例えば、`viw`とすれば単語を選択できる　`vi\"`とすれば`\"`で囲まれた範囲を選択できる"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-18",
+      "body_markdown": "normal modeで`<number>|` とすると現在行の<number>th columnに移動できる"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-18",
+      "body_markdown": "https://qiita.com/0829/items/6e16142be13a9007e91c"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-24",
+      "body_markdown": "`assert(v,message)` は`v`がnilまたはfalseの時、`message`を表示してプログラムを終了させる。`v`がそれ以外の場合、`assert(v,message)`はvを返す。なので、luaで`assert`を使って、nilチェックができる。\n```lua\nassert(assert(1) == 1) -- this should success\nassert(nil,'a is nil') -- this should fail\n```\n\nこれは、`sumneko_lua`(最近nvim-lspconfigで`lua_ls`に名前が変わった)で、`need check nil` の警告が出た時に有用。"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-24",
+      "body_markdown": "https://qiita.com/waoooon/items/8d982e49692c8145ca4b\n置換で文字を流用する方法"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-24",
+      "body_markdown": "縦に連番を作りたい時はvisual modeで`g<c-a>`すれば出来る。横は無理。\n```\n2\n2 |\n2 |\n2 |  select these four `2`. then press `g<c-a>`\n2 |\n```\n↓\n```\n2\n3\n4\n5\n6\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-08-15",
+      "body_markdown": "luaではstatementの終わりに明示的に`;`をつけることが出来る。\n```lua\nlocal a = 0; local b = 2\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-08-25",
+      "body_markdown": "`<c-g>`でファイル名、何行目か、ファイル全体のうち何処ら辺にあるのかが表示される\ne.g.`\"shift.md\" 29 lines --62%--`"
+    }
+  ]
+}

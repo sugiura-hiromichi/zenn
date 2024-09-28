@@ -1,0 +1,28 @@
+{
+  "title": "よみもの！",
+  "closed": false,
+  "archived": false,
+  "created_at": "2023-01-17",
+  "comments": [
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-17",
+      "body_markdown": "https://www.warp.dev/blog/what-happens-when-you-open-a-terminal-and-enter-ls\n\nターミナルの経緯から普段行ってることの裏側が簡素にまとめられてて面白かった"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-20",
+      "body_markdown": "https://zignar.net/2022/11/06/structuring-neovim-lua-plugins/\n\nluaでneovimを制御するための基礎知識。公式documentになって欲しい"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-28",
+      "body_markdown": "https://nnethercote.github.io/perf-book/introduction.html\n\n<これから読む>"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2024-06-15",
+      "body_markdown": "https://www.oreilly.co.jp/books/9784814400393/\n<reading now>"
+    }
+  ]
+}

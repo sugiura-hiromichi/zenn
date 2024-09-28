@@ -1,0 +1,82 @@
+{
+  "title": "しぇる",
+  "closed": false,
+  "archived": false,
+  "created_at": "2023-01-05",
+  "comments": [
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "`ln -s`をするときは、引数は絶対パス"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "`XDG_CONFIG_HOME`: 諸々の設定ファイルが置かれるディレクトリ。指定されてない場合 `~/.config/`"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "`date`コマンドで日時を確認できる"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-11",
+      "body_markdown": "`option+.`でcommand historyをカーソル位置に代入することができる\n例：\n```\n> cd\n# move to home directory\n> ls\n# list files\n> echo <option-.>\n> echo cd\n> echo cd<option-.>\n> echo ls\n# echoed 'ls'\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-13",
+      "body_markdown": "https://medium.com/@codingmaths/bin-bash-what-exactly-is-this-95fc8db817bf\n\nshell scriptなどで見かける１行目の`#!/...`は`she-bang`などと呼ばれる",
+      "body_updated_at": "2023-01-13"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-13",
+      "body_markdown": "偶然発見。実行するコマンドの前に!を追加すると同コマンドが最後に実行された時の引数を渡して実行できる。\n例：\n```\n> echo eleeeee\neleeeee\n\n> !echo\necho eleeeee\neleeeee\n\n> !echo alaaaaa\necho eleeeee alaaaaa\neleeeee alaaaaa\n```",
+      "body_updated_at": "2023-01-16"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-13",
+      "body_markdown": "偶然発見。`cd s s`とすると現在の相対パスが出力される\n例：\n```\ncd s s\n~/QwQ/awa/lol\n```",
+      "body_updated_at": "2023-01-13"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-26",
+      "body_markdown": "`jrunscript`で`JVM`上でjavascriptを実行できる。使い道はよくわからないけど"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-30",
+      "body_markdown": "`/tmp`下にあるファイルは10日、`/var/tmp`下にあるファイルは30日で消される\n[詳細はこちら](https://refspecs.linuxfoundation.org/FHS_3.0/index.html)",
+      "body_updated_at": "2023-03-23"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-31",
+      "body_markdown": "行の最後に`\\`を置くと改行できる\n例：\n```\nnvim \\\n-c \"Telescope\"\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-21",
+      "body_markdown": "weztermでwindowのタイトルバーを表示したくない場合は`window_decorations = 'RESIZE' (or 'NONE')`としてやればいい。 [詳細](https://wezfurlong.org/wezterm/config/lua/config/window_decorations.html#window_decorations--title--resize)"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-26",
+      "body_markdown": "`sudo -S`とするとstdinからパスワード入力できる。"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-03-30",
+      "body_markdown": "# [Infinite Storage Glitch](https://github.com/DvorakDwarf/Infinite-Storage-Glitch) Tips\n\nフォルダを圧縮した場合、`dislodge`の時に`output`の名前を`foldername.zip`とし、その後、`foldername.zip`を解凍する。"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-03-30",
+      "body_markdown": "`brew bundle cleanup`でBrewfileにないものをアンインストールできる"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "title": "SwiftNote",
+  "closed": false,
+  "archived": false,
+  "created_at": "2023-01-13",
+  "comments": [
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-13",
+      "body_markdown": "swiftのクロージャーは色々と省略できる\n引数の名前を省略した場合、第n引数を`$n-1`と表記する(第一引数:`$0` 第二引数: `$1`..)\n例：\n```swift\n// here assumes `nums` is array\n//at first, sort descending order\n//second, muliply each element by 10\nnums.sorted{$1<$0}.map{$0*10}\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-13",
+      "body_markdown": "swiftでは`struct`は常にコーピーして渡されるが\n`class`は常に参照が渡される"
+    }
+  ]
+}

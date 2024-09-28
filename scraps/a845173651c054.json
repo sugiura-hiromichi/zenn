@@ -1,0 +1,143 @@
+{
+  "title": "RustTips",
+  "closed": false,
+  "archived": false,
+  "created_at": "2022-12-20",
+  "comments": [
+    {
+      "author": "cp_r",
+      "created_at": "2022-12-20",
+      "body_markdown": "イテレータから値を返さない場合`map()`の代わりに`for_each()`を使うと高速",
+      "body_updated_at": "2022-12-20"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-01",
+      "body_markdown": "2つの変数の中身を交換したい場合、普通は\n\n```rust\nlet tmp=a;\na=b;\nb=tmp;\n```\n\nとするが、rustの場合、tupleを使えば\n\n```rust\n(a,b)=(b,a);\n```\n\nと、１行で済ませられる。",
+      "children": [
+        {
+          "author": "cp_r",
+          "created_at": "2023-01-13",
+          "body_markdown": "@2023-01-13 nightlyでしか使えない"
+        }
+      ]
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "`src/`内に`lib.rs`と`main.rs`が両方ある場合、二つは別々のcrateとして扱われる"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "`zip()`を使うと二つの配列(等)をタプルのiteratorとして扱える\n\n```rust\nlet x=vec![0,1,2,3,4];\nlet y=vec![4,3,2,1,0];\nfor (i,j) in x.zip(y){\n   println!(\"{i},{j}\");\n}\n/* this prints\n0,4\n1,3\n2,2\n3,1\n4,0\n*/\n\n```",
+      "body_updated_at": "2023-01-09"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-12",
+      "body_markdown": "`char`から`u8`に変換したい場合 `as`以外に\n```rust\nlet letters=b'z'-b'a';\n```\nとする方法がある"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-12",
+      "body_markdown": "iterationをしているときに所有権が必要な場合`iter()`methodではなく`into_iter()`methodを使う"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-12",
+      "body_markdown": "iteratorの`fold()`methodを使うことで楽に新しい値を作ることができる\n例：leet code 49\n```rust\nconst ALPHABETS: usize = (b'z' - b'a' + 1) as _;\nimpl Solution {\n\tpub fn group_anagrams(mut strs: Vec<String,>,) -> Vec<Vec<String,>,> {\n\t\tstrs.into_iter()\n\t\t\t.fold(HashMap::<[u8; ALPHABETS], Vec<String,>,>::new(), |mut map, s| {\n\t\t\t\tlet freqs = s.bytes().map(|b| (b - b'a') as usize,).fold(\n\t\t\t\t\t[0; ALPHABETS],\n\t\t\t\t\t|mut freqs, bin| {\n\t\t\t\t\t\tfreqs[bin] += 1;\n\t\t\t\t\t\tfreqs\n\t\t\t\t\t},\n\t\t\t\t);\n\t\t\t\tmap.entry(freqs,).or_default().push(s,);\n\t\t\t\tmap\n\t\t\t},)\n\t\t\t.into_values()\n\t\t\t.collect()\n\t}\n}\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-27",
+      "body_markdown": "```rust\nif boolean {\n   1\n} else {\n   0\n}\n```\nというコードは`::from(T)`methodを使って短縮できる\n例：\n```rust\nvec![6,7][usize::from(true)]==7\nvec![6,7][usize::from(false)]==6\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-24",
+      "body_markdown": "`HashMap`でよくやる操作の一つ、*もし`key`が存在したら`+1 (or other operation)`、しなかったら特定の値を代入*。これは\n```rust\nt_chars.entry(key,).and_modify(|i| *i += 1,).or_insert(1);\n```\nのように、`and_modify`と`or_insert`を使った方法がよく取られるが、\n```rust\nt_chars.entry(key,).or_insert(0,) += 1;\n```\nとした方が高速。"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-24",
+      "body_markdown": "# format modifier\n\n`format!`マクロではformat modifierが使える。\n```rust\nlet printout = \"printout\";\nassert_eq!(format!(\"{printout:?}\"), \"\\\"printout\\\"\");\n```",
+      "body_updated_at": "2023-02-24",
+      "children": [
+        {
+          "author": "cp_r",
+          "created_at": "2023-02-24",
+          "body_markdown": "format modifierの`p`を使うと、変数のアドレスを確認できる\n```rust\nlet x = &42;\nlet address = format!(\"{x:p}\"); // this produces something like '0x7f06092ac6d0'\n```"
+        },
+        {
+          "author": "cp_r",
+          "created_at": "2023-02-24",
+          "body_markdown": "小数点以下の桁数を指定したいときは`.4`などとすればできる\n```rust\nassert_eq!(format!(\"{:.4}\", 10.0), \"10.0000\");\n```"
+        }
+      ]
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-24",
+      "body_markdown": "rustでは関数やクロージャの型はお互いに固有なものになっている。\n```rust\nfn closure_ornot<GenT: 'static,>(_which: GenT,) -> &'static str {\n\tlet gen_id = TypeId::of::<GenT,>();\n\tif TypeId::of::<i32,>() == gen_id {\n\t\t\"GenT is i32\"\n\t} else if TypeId::of::<dyn Fn() -> i32,>() == gen_id {\n\t\t\"GenT is Fn()->i32\"\n\t} else {\n\t\t\"unexpected!!\"\n\t}\n}\n\nassert_eq!(closure_ornot(return_closure()(),), \"GenT is i32\");\nassert_eq!(closure_ornot(return_closure(),), \"unexpected!!\");\n\nfn fst_citizen() -> i32 { 0 }\nassert_eq!(closure_ornot(fst_citizen),\"unexpected!!\");\n```\n",
+      "children": [
+        {
+          "author": "cp_r",
+          "created_at": "2023-02-24",
+          "body_markdown": "こっちの方がわかりやすいかも\n```rust\n// call's \"anonymous type\"\nlet cl1 = || 1;\nlet cl2 = || 2;\nassert!(cl1.type_id() != cl2.type_id());\n\n//fn's type is as well\nfn ret1() -> i32 { 1 }\nfn ret2() -> i32 { 2 }\nfn retn() -> i32 { 1 }\nassert!(ret1.type_id() != ret2.type_id());\nassert!(ret1.type_id() != retn.type_id());\n```"
+        }
+      ]
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-24",
+      "body_markdown": "`trait`は標準ライブラリが提供している型はもちろん組み込み型にも実装できる。\n```rust\ntrait MyName {\n\tfn is(&self,) -> &str;\n}\n\nimpl<T,> MyName for Vec<T,> {\n\tfn is(&self,) -> &str { \"!Vec<T>!\" }\n}\n\nimpl MyName for i32 {\n\tfn is(&self,) -> &str { \"!int!\" }\n}\n\nimpl<T,> MyName for (i32, Vec<T,>,) {\n\tfn is(&self,) -> &str { \"!(i32, Vec<T>)!\" }\n}\n\nlet v = vec![0, 1, 1, 2, 23];\nlet ai = 0;\nassert_eq!(v.is(), \"!Vec<T>!\");\nassert_eq!(ai.is(), \"!int!\");\nassert_eq!((ai, v,).is(), \"!(i32, Vec<T>)!\");\n```\n",
+      "children": [
+        {
+          "author": "cp_r",
+          "created_at": "2023-02-24",
+          "body_markdown": "そりゃそうか"
+        }
+      ]
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-24",
+      "body_markdown": "# `Option<T>`\n\n`Option<T>`型はiteratorにできる（なぜ？？？）\n```rust\nlet a = Some(\"a\",);\nfor &i in a.iter() {\n\tassert_eq!(i, \"a\");\n}\n```\n",
+      "children": [
+        {
+          "author": "cp_r",
+          "created_at": "2023-02-24",
+          "body_markdown": "`Option<T>::map()`に渡されるクロージャのとる引数は`Option<T>`型ではなく`T`型。\n何を言っているのかわからねーと思うが自分も何を言っているのかわからなかったので例：\n```rust\nNone.map(|_one: i32| panic!(\"This painc won't be executed\"),);\nSome(1,).map(|one| assert!(one == 1),);\n```\n"
+        }
+      ]
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-03-23",
+      "body_markdown": "`cargo test`で出力を見たい時は`cargo test -- --nocapture`とするのが一般的だが、`-- --nocapture`と指定するのが面倒な場合\n```rust\n\t#[cfg(test)]\n\tmod tests {\n\t\t#[test]\n\t\tfn box_test() {\n\t\t\tlet b = Box::new(1,);\n\t\t\tassert!(false, \"{b:?}\");\n\t\t}\n\t}\n```\nのように`assert!(false, \"some output\")`\nとすると便利。",
+      "body_updated_at": "2023-03-23"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-04-02",
+      "body_markdown": "`if`文の代わりに`bool::then()`を使うとrubyのようにかける\n```rust\nlet mut a = 0;\ntrue.then(|| { a += 1; });\nfalse.then(|| { a += 1; });\nassert_eq!(a, 1);\n\nlet Some(msg) = return_boolean().then(|| \"returned true\") else {\n   panic(\"returned false\");\n};\nassert_eq!(msg, \"returned true\");\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-04-02",
+      "body_markdown": "`Iterator::flat_map()`はnestした型を均したい時に便利\n```rust\nlet vector = vec![0, 1, 2];\nlet from_map: Vec<u8,> = vector.iter().map(|n| n * 2,).collect();\nlet vecvec = vec![vector.clone(); 3];\nlet from_flat_map: Vec<u8,> = vecvec.iter().flat_map(|i| i.clone(),).collect();\nassert_eq!(from_map, [0, 2, 4]);\nassert_eq!(from_flat_map, [0, 1, 2, 0, 1, 2, 0, 1, 2]);\n```",
+      "body_updated_at": "2023-04-02"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-04-02",
+      "body_markdown": "labelから値を返すことができるようになった（from `rust 1.65.0`)\nstatement用のearly returnとでも言いましょうか\n```rust\nlet rslt = 'b: {\n\tif false {\n\t\tbreak 'b 1;\n\t}\n                     \n\tif true {\n\t\tbreak 'b 2;\n\t}\n\t3\n};\nassert_eq!(rslt, 2);\n```"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-04-02",
+      "body_markdown": "rustでもscientific notationは使えまぁす\n```rust\nlet a = 1e5 as i32;\nassert_eq!(a, 100000);\n```"
+    }
+  ]
+}

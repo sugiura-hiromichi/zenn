@@ -1,0 +1,44 @@
+{
+  "title": "MacTips",
+  "closed": false,
+  "archived": false,
+  "created_at": "2023-01-05",
+  "comments": [
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "`pmset -g batt` を実行するとバッテリーの残量が表示される。~~`starship`を入れてるのでぶっちゃけ使わない~~"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "音量をキーボードから調整する時、一緒に`option+shift`を押すとより細かく(1/4)調整できる"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-01-05",
+      "body_markdown": "`option + f10 (or f11 or f12)` でsystem settingのsoundの設定ページを開ける\n`option + f1 (or f2)` でsystem settingsのdisplayの設定ページを開ける"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-01",
+      "body_markdown": "`ctrl + eject`でシャットダウン\n`eject`キーはHHKBだと`fn + f`に割り当てられている"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-02-25",
+      "body_markdown": "複数のスペースを使う事が出来るmacの仮想デスクトップ機能。ちょっと前にwindowsにパクられたけど、まだmacにしかない（多分）便利オプションとしてスペース毎に壁紙を設定できる、というものがある。やり方はそれぞれのスペースで壁紙を設定するとそれが反映される。\nちなみにmacでは壁紙を設定する方法は様々あるけどどの方法で設定しても大丈夫だった。"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2023-08-31",
+      "body_markdown": "`ctrl+l`でカーソルのある行を真ん中に呼べる。あまり知られていないが神。",
+      "body_updated_at": "2024-06-10"
+    },
+    {
+      "author": "cp_r",
+      "created_at": "2024-06-10",
+      "body_markdown": "`ctrl/fn + power`でシャットダウンのオプションが表示されたpopupを呼び出せる\n`power`キーはHHKBの`fn + esc`に割り振られてる"
+    }
+  ]
+}
