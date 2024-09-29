@@ -45,4 +45,45 @@ interface Mailable {
 	queue(email: string): boolean
 }
 
+interface FutureMailable extends Mailable {
+	later(email: string, after: number): boolean
+}
+
+class Mail implements FutureMailable {
+	send(email: string): boolean {
+		`send email to ${email}`;
+		return true;
+	}
+	queue(email: string): boolean {
+		`queue an email to ${email}`;
+		return true;
+	}
+	later(email: string, after: number): boolean {
+		`send email to ${email} in ${after} ms`;
+		return true;
+	}
+}
+
+class Control {
+	private state: boolean;
+}
+
+interface StatefulControl extends Control {
+	enable(): void
+}
+
+class Button extends Control implements StatefulControl {
+	enable() { }
+}
+class TextBox extends Control implements StatefulControl {
+	enable() { }
+}
+class Label extends Control { }
+
+
+// Error: cannot implement because `Chart` does not have state
+//class Chart implements StatefulControl {
+//	enable() { }
+//}
+
 console.log('🫠');
