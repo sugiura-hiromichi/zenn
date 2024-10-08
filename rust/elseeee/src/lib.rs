@@ -18,24 +18,19 @@ mod tests {
 			self.prv_fn().to_string() + self.private_member.to_string().as_str()
 		}
 
-		fn prv_fn(&self,) -> String {
-			self.pub_member.to_string() + "in plivate function"
-		}
+		fn prv_fn(&self,) -> String { self.pub_member.to_string() + "in plivate function" }
 	}
 
 	pub mod mod1 {
 		//!Documentation for module
 		pub mod mod2 {
-			pub(in crate::tests::mod1) fn visible() -> &'static str {
-				"mod1::mod2::visible()"
-			}
+			pub(in crate::tests::mod1) fn visible() -> &'static str { "mod1::mod2::visible()" }
 		}
 
 		pub mod mod4 {}
 
 		pub fn allowed_view() -> String {
-			"calling from mod1::allowed_view()---------".to_string()
-				+ mod2::visible()
+			"calling from mod1::allowed_view()---------".to_string() + mod2::visible()
 		}
 	}
 
@@ -53,10 +48,7 @@ mod tests {
 		let mut string_vecs: Vec<&str,> =
 			vec!["--options", "-h", "--help", "a", "z", "0", "9", "A", "Z"];
 		string_vecs.sort();
-		assert_eq!(
-			string_vecs,
-			vec!["--help", "--options", "-h", "0", "9", "A", "Z", "a", "z",]
-		);
+		assert_eq!(string_vecs, vec!["--help", "--options", "-h", "0", "9", "A", "Z", "a", "z",]);
 	}
 
 	#[test]
@@ -81,8 +73,7 @@ mod tests {
 		let vector = vec![0, 1, 2];
 		let from_map: Vec<u8,> = vector.iter().map(|n| n * 2,).collect();
 		let vecvec = vec![vector.clone(); 3];
-		let from_flat_map: Vec<u8,> =
-			vecvec.iter().flat_map(|i| i.clone(),).collect();
+		let from_flat_map: Vec<u8,> = vecvec.iter().flat_map(|i| i.clone(),).collect();
 		assert_eq!(from_map, [0, 2, 4]);
 		assert_eq!(from_flat_map, [0, 1, 2, 0, 1, 2, 0, 1, 2]);
 	}
@@ -234,7 +225,7 @@ mod tests {
 
 		struct GetHiddenType;
 
-		#[allow(dead_code)]
+		#[allow(dead_code, non_local_definitions)]
 		fn hoge() {
 			struct NotHidden {
 				name: String,
@@ -296,12 +287,48 @@ mod tests {
 		let mut zero_to_nine = vec![];
 		(48..(48 + 10)).for_each(|i| {
 			let into_char = char::from_u32(i,);
-			zero_to_nine
-				.push(into_char.expect("Failed to convert {i} to char",),);
+			zero_to_nine.push(into_char.expect("Failed to convert {i} to char",),);
 		},);
-		assert_eq!(
-			zero_to_nine,
-			['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-		);
+		assert_eq!(zero_to_nine, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+	}
+
+	#[test]
+	fn dir_file_name() -> std::io::Result<(),> {
+		let cur_path = std::env::current_dir()?;
+		let dir_name = cur_path.file_name().unwrap().to_str().unwrap();
+		assert_eq!("elseeee", dir_name);
+		Ok((),)
+	}
+
+	#[test]
+	fn file_name_and_extension() {
+		let a: std::path::PathBuf = "/a/gg.rs".into();
+		assert_eq!(a.file_name().unwrap().to_str().unwrap(), "gg.rs");
+	}
+
+	#[test]
+	fn path_pop() {
+		let mut path = std::path::PathBuf::from("/tmp",);
+		assert!(path.pop());
+		assert_eq!(std::path::PathBuf::from("/"), path);
+		assert!(!path.pop());
+	}
+	#[test]
+	fn path_parent() {
+		let mut path = std::path::PathBuf::from("/tmp",);
+		path = path.parent().unwrap().to_path_buf();
+		assert_eq!(std::path::PathBuf::from("/"), path);
+		assert_eq!(None, path.parent());
+	}
+
+	#[test]
+	fn pp() {
+		#[derive(Debug,)]
+		struct A {
+			x: i32,
+			y: i32,
+		}
+		let a = A { x: 0, y: 3, };
+		dbg!(a);
 	}
 }
