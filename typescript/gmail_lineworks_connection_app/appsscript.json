@@ -1,0 +1,16 @@
+{
+  "timeZone": "Asia/Tokyo",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "LINEWORKS",
+      "libraryId": "1aLcCr3CWqfenPMyM0_FWIDUgRcTxsit9bO6BTx61NCXrCtkY2zbHBlod",
+      "version": "68"
+    }]
+  },
+  "webapp": {
+    "access": "ANYONE_ANONYMOUS",
+    "executeAs": "USER_DEPLOYING"
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}

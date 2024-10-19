@@ -37,4 +37,17 @@ console.assert(replaced === '2024/10/7', `replaced is ${replaced}`);
 let date2 = new Date('2024/10/7 11:00');
 console.log(date2.toLocaleString());
 
+let aaaaaaa = 0;
+
+for (; aaaaaaa < 10;) {
+	try {
+		aaaaaaa += 1;
+		throw new Error('');
+	} catch (e) { continue; }
+
+	aaaaaaa += 1000;
+}
+
+console.assert(aaaaaaa === 10);
+
 console.log('🫠');

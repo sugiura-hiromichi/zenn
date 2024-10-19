@@ -2,6 +2,9 @@
 
 mod dec_macro;
 mod format;
+mod memory_for_nothing;
+mod pin;
+mod lazy_generics_idea;
 
 #[cfg(test)]
 mod tests {
@@ -328,7 +331,14 @@ mod tests {
 			x: i32,
 			y: i32,
 		}
-		let a = A { x: 0, y: 3, };
+		let mut a = A { x: 0, y: 3, };
+		a.x = 1;
+		a.y = 4;
 		dbg!(a);
+	}
+
+	#[test]
+	fn logging() {
+		eprintln!("🫠");
 	}
 }
