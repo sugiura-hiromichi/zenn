@@ -20,15 +20,11 @@ function main() {
 }
 
 function booking_mails() {
-	const booking_address = 'Bookings@c-live.jp';
-	const forwarder = 'hospitouch2@c-live.jp';
+	const booking_address = 'hospitouch2@c-live.jp';
 
 	// `lABEL`が存在する場合は新たに作成し、存在する場合は何もしない
 	//GmailApp.createLabel(LABEL);
 	let threads = GmailApp.search(`in:inbox AND has:nouserlabels -l:${LABEL} AND from:${booking_address} AND after: 2024/10/17`);
-	GmailApp.search(`-予約 AND in:inbox AND has:nouserlabels -l:${LABEL} AND from:${forwarder} AND after: 2024/10/17`).forEach((thread) => {
-		threads.push(thread);
-	});
 
 	threads.sort((a, b) => {
 		const am = a.getMessages()[0].getDate().getTime();

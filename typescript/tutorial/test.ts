@@ -50,4 +50,6 @@ for (; aaaaaaa < 10;) {
 
 console.assert(aaaaaaa === 10);
 
+console.assert('abc'.search('d') === -1);
+
 console.log('🫠');
