@@ -1,10 +1,10 @@
 //!Documentation for crate
 
-mod dec_macro;
-mod format;
-mod memory_for_nothing;
-mod pin;
-mod lazy_generics_idea;
+pub mod dec_macro;
+pub mod format;
+pub mod lazy_generics_idea;
+pub mod memory_for_nothing;
+pub mod pin;
 
 #[cfg(test)]
 mod tests {

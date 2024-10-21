@@ -1,6 +1,6 @@
 //! [original](https://geo-ant.github.io/blog/2024/rust-rethinking-builders-lazy-generics/#fn:bon-core)
 
-struct Pod<'a, S, T,>
+pub struct Pod<'a, S, T,>
 where
 	S: std::fmt::Display,
 	T: std::fmt::Debug + MyTrait,
@@ -12,7 +12,7 @@ where
 	f5: Option<T,>,
 }
 
-trait MyTrait {
+pub trait MyTrait {
 	type AssocType;
 }
 
@@ -20,7 +20,7 @@ impl MyTrait for i32 {
 	type AssocType = Empty;
 }
 
-struct PodBuilder<F1, F2, F3, F4, F5,> {
+pub struct PodBuilder<F1, F2, F3, F4, F5,> {
 	f1: F1,
 	f2: F2,
 	f3: F3,
@@ -41,7 +41,7 @@ impl PodBuilder<Empty, Empty, Empty, Empty, Empty,> {
 }
 
 impl<F1, F2, F3, F4, F5,> PodBuilder<F1, F2, F3, F4, F5,> {
-	fn build<'a, S, T,>(self,) -> Pod<'a, S, T,>
+	pub fn build<'a, S, T,>(self,) -> Pod<'a, S, T,>
 	where
 		T: std::fmt::Debug + MyTrait,
 		S: std::fmt::Display,
@@ -60,12 +60,12 @@ impl<F1, F2, F3, F4, F5,> PodBuilder<F1, F2, F3, F4, F5,> {
 		}
 	}
 
-	fn f1(self, f1: f32,) -> PodBuilder<Assigned<f32,>, F2, F3, F4, F5,>
+	pub fn f1(self, f1: f32,) -> PodBuilder<Assigned<f32,>, F2, F3, F4, F5,>
 	where F1: Assignable<f32,> {
 		PodBuilder { f1: Assigned(f1,), f2: self.f2, f3: self.f3, f4: self.f4, f5: self.f5, }
 	}
 
-	fn f2<S,>(self, f2: S,) -> PodBuilder<F1, Assigned<S,>, F3, F4, F5,>
+	pub fn f2<S,>(self, f2: S,) -> PodBuilder<F1, Assigned<S,>, F3, F4, F5,>
 	where
 		S: std::fmt::Display,
 		F2: Assignable<S,>,
@@ -73,7 +73,7 @@ impl<F1, F2, F3, F4, F5,> PodBuilder<F1, F2, F3, F4, F5,> {
 		PodBuilder { f1: self.f1, f2: Assigned(f2,), f3: self.f3, f4: self.f4, f5: self.f5, }
 	}
 
-	fn f3<'a, T,>(self, f3: &'a T,) -> PodBuilder<F1, F2, Assigned<&'a T,>, F4, F5,>
+	pub fn f3<'a, T,>(self, f3: &'a T,) -> PodBuilder<F1, F2, Assigned<&'a T,>, F4, F5,>
 	where
 		T: std::fmt::Debug + MyTrait,
 		F3: Assignable<T,>,
@@ -81,7 +81,7 @@ impl<F1, F2, F3, F4, F5,> PodBuilder<F1, F2, F3, F4, F5,> {
 		PodBuilder { f1: self.f1, f2: self.f2, f3: Assigned(f3,), f4: self.f4, f5: self.f5, }
 	}
 
-	fn f5<'a, T,>(self, f5: Option<T,>,) -> PodBuilder<F1, F2, F3, F4, Assigned<Option<T,>,>,>
+	pub fn f5<'a, T,>(self, f5: Option<T,>,) -> PodBuilder<F1, F2, F3, F4, Assigned<Option<T,>,>,>
 	where
 		T: std::fmt::Debug + MyTrait,
 		F5: Assignable<Option<T,>,>,
@@ -92,13 +92,13 @@ impl<F1, F2, F3, F4, F5,> PodBuilder<F1, F2, F3, F4, F5,> {
 
 #[derive(Default,)]
 /// this type indicates field has not been set
-struct Empty;
-struct Assigned<T,>(T,);
+pub struct Empty;
+pub struct Assigned<T,>(T,);
 
-trait Assignable<T,> {}
+pub trait Assignable<T,> {}
 impl<T,> Assignable<T,> for Empty {}
 
-trait HasValue {
+pub trait HasValue {
 	type ValueType;
 	fn value(self,) -> Self::ValueType;
 }
@@ -120,7 +120,7 @@ mod tests {
 	use super::*;
 
 	#[test]
-	fn build_success() {
+	fn build_success_without_f4() {
 		let f3 = &0;
 		let builder = PodBuilder::new().f1(0.0,).f2("a",).f3(f3,).f5(Some(6,),);
 		let pod = builder.build();
