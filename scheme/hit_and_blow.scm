@@ -19,6 +19,7 @@
 
 (define answer (random-list))
 
+
 (define n 0)
 (define (update ans)
 	(set! n (+ n 1))
@@ -36,4 +37,28 @@
 				(cons inp (i (- n 1))))))
 	(i 4))
 
-(define )
+(define (check expect ans)
+	(let ((blow (blows expect ans)) (hit (hits expect ans)))
+		(define (when_correct) (display "hits 4 blows 0") t)
+		(define (or_else)
+			(display "hits ") (display hit) (display " blows ") (display blow)
+			#f
+		)
+		(if (eqv? hit 4)
+			(when_correct)
+			(or_else)
+		)
+	)
+)
+
+(define (blows expect ans)
+	(define (extract expect)
+
+	)
+	(define l '())
+	(define (bli expect ans idx)
+		(if (eqv? 3 idx)
+
+		)
+	)
+)

@@ -341,4 +341,20 @@ mod tests {
 	fn logging() {
 		eprintln!("🫠");
 	}
+
+	#[test]
+	fn test_with_stdout() {
+		use std::io::stdout;
+		use std::io::Write;
+		let mut out = stdout().lock();
+		writeln!(out, "yes").unwrap();
+	}
+
+	#[test]
+	fn test_with_mylib_stdio() {
+		mylibrary_::test_print!("🫠 mylibrary_::test_print!🫠");
+		mylibrary_::test_eprint!("🫠 mylibrary_::test_eprint!🫠");
+		mylibrary_::test_println!("🫠 mylibrary_::test_println!🫠");
+		mylibrary_::test_eprintln!("🫠 mylibrary_::test_eprintln!🫠");
+	}
 }

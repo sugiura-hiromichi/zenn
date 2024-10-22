@@ -13,5 +13,6 @@ harness = false
 divan = "*"
 
 [dependencies]
+mylibrary_ = "*"
 pin-project = "*"
 pin-utils = "*"
