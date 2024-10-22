@@ -38,7 +38,7 @@ struct PinnedSelfRef {
 	/// ---
 	/// # markdown
 	///
-	/// *a*
+	/// *beautiful*
 	/// - [ ] todo
 	/// - [-] pending
 	/// - [x] done
