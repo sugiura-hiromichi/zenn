@@ -4,4 +4,4 @@
 fn main() { divan::main(); }
 
 #[divan::bench]
-fn stdio(b: divan::Bencher,) { let n = 1000; }
+fn stdio(_b: divan::Bencher,) { let _n = 1000; }
