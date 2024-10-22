@@ -5,19 +5,35 @@ where
 	S: std::fmt::Display,
 	T: std::fmt::Debug + MyTrait,
 {
-	f1: f32,
-	f2: S,
-	f3: &'a T,
-	f4: T::AssocType,
-	f5: Option<T,>,
+	pub f1: f32,
+	pub f2: S,
+	pub f3: &'a T,
+	pub f4: T::AssocType,
+	pub f5: Option<T,>,
 }
 
 pub trait MyTrait {
 	type AssocType;
 }
 
+impl MyTrait for Empty {
+	type AssocType = Empty;
+}
+
 impl MyTrait for i32 {
 	type AssocType = Empty;
+}
+
+impl MyTrait for String {
+	type AssocType = Empty;
+}
+
+impl MyTrait for char {
+	type AssocType = String;
+}
+
+impl MyTrait for bool {
+	type AssocType = char;
 }
 
 pub struct PodBuilder<F1, F2, F3, F4, F5,> {
@@ -72,8 +88,7 @@ impl<F1, F2, F3, F4, F5,> PodBuilder<F1, F2, F3, F4, F5,> {
 	{
 		PodBuilder { f1: self.f1, f2: Assigned(f2,), f3: self.f3, f4: self.f4, f5: self.f5, }
 	}
-
-	pub fn f3<'a, T,>(self, f3: &'a T,) -> PodBuilder<F1, F2, Assigned<&'a T,>, F4, F5,>
+pub fn f3<'a, T,>(self, f3: &'a T,) -> PodBuilder<F1, F2, Assigned<&'a T,>, F4, F5,>
 	where
 		T: std::fmt::Debug + MyTrait,
 		F3: Assignable<T,>,
@@ -81,14 +96,34 @@ impl<F1, F2, F3, F4, F5,> PodBuilder<F1, F2, F3, F4, F5,> {
 		PodBuilder { f1: self.f1, f2: self.f2, f3: Assigned(f3,), f4: self.f4, f5: self.f5, }
 	}
 
-	pub fn f5<'a, T,>(self, f5: Option<T,>,) -> PodBuilder<F1, F2, F3, F4, Assigned<Option<T,>,>,>
+	pub fn f5<T,>(self, f5: Option<T,>,) -> PodBuilder<F1, F2, F3, F4, Assigned<Option<T,>,>,>
 	where
 		T: std::fmt::Debug + MyTrait,
 		F5: Assignable<Option<T,>,>,
 	{
 		PodBuilder { f1: self.f1, f2: self.f2, f3: self.f3, f4: self.f4, f5: Assigned(f5,), }
 	}
+
+	pub fn f4<T: MyTrait,>(
+		self,
+		f4: T::AssocType,
+	) -> PodBuilder<F1, F2, F3, Assigned<T::AssocType,>, F5,> {
+		PodBuilder { f1: self.f1, f2: self.f2, f3: self.f3, f4: Assigned(f4,), f5: self.f5, }
+	}
 }
+
+/*
+impl<'a, T, F1, F2,> PodBuilder<F1, F2, Empty, Empty, Assigned<Option<T,>,>,>
+where T: std::fmt::Debug + MyTrait
+{
+	pub fn f4(
+		self,
+		f4: T::AssocType,
+	) -> PodBuilder<F1, F2, Empty, Assigned<T::AssocType,>, Assigned<Option<T,>,>,> {
+		PodBuilder { f1: self.f1, f2: self.f2, f3: self.f3, }
+	}
+}
+ */
 
 #[derive(Default,)]
 /// this type indicates field has not been set
@@ -117,12 +152,38 @@ impl HasValue for Empty {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn build_success_without_f4() {
-		let f3 = &0;
-		let builder = PodBuilder::new().f1(0.0,).f2("a",).f3(f3,).f5(Some(6,),);
-		let pod = builder.build();
+		let builder = PodBuilder::new().f1(0.0,).f2("a",).f3(&0,).f5(Some(6,),);
+		let _pod = builder.build();
+
+		let builder = PodBuilder::new()
+			.f1(0.1,)
+			.f2(true,)
+			.f3(&'a',)
+			.f4::<char>("a".to_string(),)
+			.f5(Some('b',),);
+		let _pod = builder.build();
+
+		/*
+						 let builder = PodBuilder::new().f1(0.2,).f5(None,);
+				if std::env::var("HOME",).is_ok() {
+					builder.f4('a',).f2(true,).f3(&true,);
+				} else if std::env::var("XDG_CONFIG_HOME",).is_ok() {
+					builder.f2(0,).f3(&0,); //i32
+				} else {
+					builder.f2("3",); //empty
+				}
+				let _pod = builder.build();
+		*/
+		let builder = PodBuilder::new().f1(0.3,).f2(true,);
+		if std::env::var("HOME",).is_ok() {
+			let _pod = builder.f3(&0,).f5(None,).build();
+		} else {
+			let _pod = builder.f3(&"a".to_string(),).f5(None,).build();
+		};
 	}
 }
