@@ -72,6 +72,7 @@ function new_event(mail: GoogleAppsScript.Gmail.GmailMessage) {
 
 	// Calendarの取得
 
+
 	// Calendarへの登録
 
 	// メールの送信
@@ -191,7 +192,7 @@ function parse_inner_note(lines: string[]): string {
 	});
 
 	let inner_note = lines[idx + 2];
-	if (inner_note === 'ここでは、このサービスに関するメモを追加できます。このメモは、あなたとスタッフだけが見ることができます。') {
+	if (inner_note.includes('ここでは、このサービスに関するメモを追加できます。このメモは、あなたとスタッフだけが見ることができます。')) {
 		inner_note = '';
 	}
 	return inner_note;
@@ -203,22 +204,21 @@ function parse_meeting_url(lines: string[]): string {
 	});
 
 	const meeting_url = lines.slice(idx, idx + 3).join('\n');
-	return meeting_url;
+	return meeting_url.substring('今すぐ会議に参加する'.length);
 }
 
 function parse_date(lines: string[]): [string, string] {
 	throw new Error('unimplemented');
 	return ['', ''];
 }
+
 /*
 
 ---
 */
-
 function test() {
-	//const mail_id = `<74650e11e20e4eda8ceb1a4749679d23@TYCP286MB2896.JPNP286.PROD.OUTLOOK.COM>`;
 	const thread = GmailApp.search('FW: 「ほすぴタッチ」オンライン相談（無料） - シーメンスヘルスケア松本純弥')[0];
-	const message = thread.getMessages()[0].getPlainBody().split('n');
+	const message = thread.getMessages()[0].getPlainBody().split('\n');
 	console.log(parse_name(message, 'new'));
 	console.log(parse_corp(message));
 	console.log(parse_address(message));
