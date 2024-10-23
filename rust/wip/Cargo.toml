@@ -1,0 +1,3 @@
+[workspace]
+members = ["elseeee", "gas_with_wasm", "simple_server", "wasm_alloc"]
+resolver = "2"

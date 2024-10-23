@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+	<meta charset="utf-8" />
+	<title>🫠wasm_alloc</title>
+</head>
+
+<body>
+	<script type="module">
+		import init, {greet} from "./pkg/wasm_alloc.js";
+		init().then(() => {
+			greet("WASM");
+		});
+	</script>
+</body>
+
+</html>
