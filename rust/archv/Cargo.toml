@@ -1,0 +1,2 @@
+[workspace]
+members = ["elseeee", "gas_with_wasm"]
