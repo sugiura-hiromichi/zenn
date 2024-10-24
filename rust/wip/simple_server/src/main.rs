@@ -9,24 +9,31 @@ use std::net::TcpListener;
 use std::net::TcpStream;
 
 struct HTTPResponce {
-	version: String,
-	status:  u16,
-	reason:  String,
-	headers: Option<String,>,
-	body:    Option<String,>,
+	version: Vec<u8,>,
+	status:  Vec<u8,>,
+	reason:  Vec<u8,>,
+	headers: Vec<u8,>,
+	body:    Vec<u8,>,
 }
 
 impl HTTPResponce {
-	fn new(v: &str, status: u16, r: &str, h: Option<&str,>, b: Option<&str,>,) -> Self {
-		let h = if let Some(s,) = h { Some(s.to_string(),) } else { None };
-		let b = if let Some(s,) = b { Some(s.to_string(),) } else { None };
-		Self { version: v.to_string(), status, reason: r.to_string(), headers: h, body: b, }
+	fn new(v: &str, status: u16, r: &str, headers: Option<String,>, body: Vec<u8,>,) -> Self {
+		Self {
+			version: v.as_bytes().to_vec(),
+			status: status.to_string().as_bytes().to_vec(),
+			reason: r.as_bytes().to_vec(),
+			headers: headers.map_or(vec![], |s| s.as_bytes().to_vec(),),
+			body,
+		}
 	}
 
-	fn format(&self,) -> String {
-		let h = if let Some(s,) = &self.headers { s } else { &"".to_string() };
-		let b = if let Some(s,) = &self.body { s } else { &"".to_string() };
-		format!("{} {} {}\r\n{}\r\n{}", self.version, self.status, self.reason, h, b)
+	fn format(&self,) -> Vec<u8,> {
+		let statusline =
+			[self.version.clone(), self.status.clone(), self.reason.clone(),].join(&[b' ',][..],);
+		let rslt =
+			[statusline, self.headers.clone(), self.body.clone(),].join(&[b'\r', b'\n',][..],);
+
+		rslt
 	}
 }
 
@@ -35,26 +42,47 @@ fn handle_connection(mut stream: TcpStream,) -> Rslt<(),> {
 	stream.read(&mut buf,)?;
 	let req = String::from_utf8_lossy(&buf,);
 	let req = req.trim();
-	println!("{req}");
+	println!("\n\n# Request\n\n{req}");
 
 	let req_line = req.lines().next().unwrap();
 
-	println!("🫠--------------");
-	let mut file = File::open("index.html",)?;
-	let mut contents = String::new();
-	file.read_to_string(&mut contents,)?;
+	let uri = req_line
+		.split_whitespace()
+		.find(|s| !s.contains("GET",) && !s.contains("HTTP,",),)
+		.unwrap();
+	println!("\n\n# URI\n\n{uri}");
+
+	let (path, cntnt_type,) = if uri == "/" {
+		("index.html".to_string(), "text/html",)
+	} else {
+		let extension = uri.split('.',).last().unwrap();
+
+		(
+			".".to_owned() + uri,
+			match extension {
+				"js" => "text/javascript",
+				"wasm" => "application/wasm",
+				_ => "text/plain",
+			},
+		)
+	};
+	let mut file = File::open(path,)?;
+	let mut contents = Vec::new();
+	file.read_to_end(&mut contents,).expect("🫠 failed to load file",);
 
 	let rsp = HTTPResponce::new(
 		"HTTP/1.1",
 		200,
 		"OK",
-		Some("content-type: text/html\n",),
-		Some(&contents,),
+		Some(format!("content-type: {cntnt_type}\n"),),
+		contents,
 	);
 	let rsp = rsp.format();
+	println!("\n\n# Responce\n\n{}", String::from_utf8_lossy(&rsp));
+	let rsp = rsp.as_slice();
 
-	stream.write(rsp.as_bytes(),)?;
-	stream.flush()?;
+	stream.write(rsp,).expect("🫠 failed to write to stream",);
+	stream.flush().expect("🫠 failed to flush stream",);
 	Ok((),)
 }
 
