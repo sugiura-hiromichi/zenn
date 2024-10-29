@@ -1,1 +1,0 @@
-# lennard-jones potential
